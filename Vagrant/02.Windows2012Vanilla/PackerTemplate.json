@@ -1,0 +1,36 @@
+{
+    "builders": [{
+    "type": "virtualbox-iso",
+    "vboxmanage": [
+      [ "modifyvm", "{{.Name}}", "--natpf1", "winrm,tcp,,55985,,5985" ],
+      [ "modifyvm", "{{.Name}}", "--memory", "1500" ],
+      [ "modifyvm", "{{.Name}}", "--cpus", "1" ]
+    ],
+    "guest_os_type": "Windows2012_64",
+    "iso_url": "TODO",
+    "iso_checksum": "TODO",
+    "iso_checksum_type": "md5",
+    "communicator": "winrm",
+    "winrm_username": "vagrant",
+    "winrm_password": "vagrant",
+    "winrm_port": "55985",
+    "winrm_timeout": "8h",
+    "guest_additions_mode": "disable",
+    "shutdown_command": "C:/windows/system32/sysprep/sysprep.exe /generalize /oobe /unattend:C:/Windows/Panther/Unattend/unattend.xml /quiet /shutdown",
+    "shutdown_timeout": "15m",
+    "floppy_files": [
+      "Autounattend.xml",
+      "postunattend.xml",
+      "boxstarter.ps1",
+      "package.ps1"
+    ]
+  }],
+    "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": true,
+      "output": "windows2012r2min-{{.Provider}}.box",
+      "vagrantfile_template": "vagrantfile-windows.template"
+    }
+  ]
+}
